@@ -14,14 +14,17 @@ const dbProductsMock = [
 ];
 
 const productMock = {
-  id: 2,
+  id: 4,
   name: 'Veste Black Widow',
 };
 
-const dbId = 2;
+const dbId = 4;
+
+const dbInsertId = { insertId: 4 };
 
 module.exports = {
   dbProductsMock,
   dbId,
   productMock,
+  dbInsertId,
 };

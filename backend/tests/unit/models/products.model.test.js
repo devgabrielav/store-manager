@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const Sinon = require('sinon');
 const connection = require('../../../src/models/connection');
 const productsModel = require('../../../src/models/products.model');
-const { productMock, dbId, dbProductsMock } = require('../mocks/products.mocks');
+const { productMock, dbId, dbProductsMock, dbInsertId } = require('../mocks/products.mocks');
 
 describe('Realizando testes - PRODUCTS MODEL:', function () {
   it('Testa buscar todos os produtos', async function () {
@@ -21,6 +21,15 @@ describe('Realizando testes - PRODUCTS MODEL:', function () {
 
     expect(product).to.be.a('object');
     expect(product).to.deep.equal(productMock);
+  });
+
+  it('Testa adicionar um novo produto', async function () {
+    Sinon.stub(connection, 'execute').resolves([dbInsertId]);
+
+    const insertId = await productsModel.addProductDb('Veste Black Widow');
+
+    expect(insertId).to.be.a('number');
+    expect(insertId).to.equal(dbId);
   });
 
   afterEach(function () {

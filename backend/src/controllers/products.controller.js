@@ -23,7 +23,16 @@ const getProductByIdRoute = async (req, res) => {
   return res.status(code).json(data);
 };
 
+const addProductRoute = async (req, res) => {
+  const { name } = req.body;
+  const { status, data } = await productsServices.addProduct(name);
+  const code = httpMap[status];
+
+  return res.status(code).json(data);
+};
+
 module.exports = {
   getAllProductsRoute,
   getProductByIdRoute,
+  addProductRoute,
 };

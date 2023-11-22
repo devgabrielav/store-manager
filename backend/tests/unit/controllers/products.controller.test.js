@@ -46,11 +46,28 @@ describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
     const res = {};
     res.status = Sinon.stub().returns(res);
     res.json = Sinon.stub().returns(res);
-    console.log(res.json);
 
     await productsController.getProductByIdRoute(req, res);
     expect(res.status.calledWith(404)).to.be.equal(true);
     expect(res.json.calledWith({ message: 'Product not found' })).to.be.equal(true);
+  });
+
+  it('Adiciona novo produto', async function () {
+    Sinon.stub(productsService, 'addProduct').resolves({ status: 'CREATED', data: productMock });
+    
+    const req = {
+      body: {
+        name: 'Veste Black Widow',
+      },
+    };
+    const res = {};
+    res.status = Sinon.stub().returns(res);
+    res.json = Sinon.stub().returns(res);
+
+    await productsController.addProductRoute(req, res);
+
+    expect(res.status.calledWith(201)).to.be.equal(true);
+    expect(res.json.calledWith(productMock)).to.be.equal(true);
   });
 
   afterEach(function () {
