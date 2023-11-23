@@ -37,11 +37,12 @@ const addSaleDate = async () => {
 
 const addNewSaleBd = async (products) => {
   const id = await addSaleDate();
+
   await Promise.all(products.map((product) => connection.execute(
     'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?)',
     [id, product.productId, product.quantity],
   )));
-  
+
   return id;
 };
 

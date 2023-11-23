@@ -21,10 +21,40 @@ const saleMock = [
   },
 ];
 
-const dbId = 2;
+const newSalesMock = [
+  {
+    productId: 1,
+    quantity: 1,
+  },
+  {
+    productId: 2,
+    quantity: 5,
+  },
+];
+
+const newSalesReturnMock = {
+  id: 4,
+  itemsSold: [
+    {
+      productId: 1,
+      quantity: 1,
+    },
+    {
+      productId: 2,
+      quantity: 5,
+    },
+  ],
+};
+
+const dbId = 4;
+
+const dateId = { insertId: 4 };
 
 module.exports = {
   dbSalesMock,
   saleMock,
   dbId,
+  newSalesMock,
+  newSalesReturnMock,
+  dateId,
 };

@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const Sinon = require('sinon');
 const salesModel = require('../../../src/models/sales.model');
 const connection = require('../../../src/models/connection');
-const { dbId, dbSalesMock, saleMock } = require('../mocks/sales.mocks');
+const { dbId, dbSalesMock, saleMock, newSalesMock, dateId } = require('../mocks/sales.mocks');
 
 describe('Realizando testes - SALES MODEL:', function () {
   it('Testa buscar todas as vendas', async function () {
@@ -21,6 +21,15 @@ describe('Realizando testes - SALES MODEL:', function () {
 
     expect(sale).to.be.a('array');
     expect(sale).to.deep.equal([saleMock]);
+  });
+
+  it('Adiciona novas vendas', async function () {
+    Sinon.stub(connection, 'execute').resolves([dateId]);
+
+    const newSaleId = await salesModel.addNewSaleBd(newSalesMock);
+
+    expect(newSaleId).to.be.a('number');
+    expect(newSaleId).to.deep.equal(dbId);
   });
 
   afterEach(function () {

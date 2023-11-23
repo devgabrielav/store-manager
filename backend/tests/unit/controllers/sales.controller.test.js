@@ -2,7 +2,7 @@ const Sinon = require('sinon');
 const { expect } = require('chai');
 const salesService = require('../../../src/services/sales.service');
 const salesController = require('../../../src/controllers/sales.controller');
-const { saleMock, dbSalesMock } = require('../mocks/sales.mocks');
+const { saleMock, dbSalesMock, newSalesMock, newSalesReturnMock, dbId } = require('../mocks/sales.mocks');
 
 describe('Realizando testes - SALES CONTROLLER:', function () {
   it('Busca todas as vendas na rota /sales', async function () {
@@ -50,6 +50,21 @@ describe('Realizando testes - SALES CONTROLLER:', function () {
     await salesController.getSaleByIdRoute(req, res);
     expect(res.status.calledWith(404)).to.be.equal(true);
     expect(res.json.calledWith({ message: 'Sale not found' })).to.be.equal(true);
+  });
+
+  it('Adiciona novas vendas e retorna CREATED', async function () {
+    Sinon.stub(salesService, 'addNewSale').resolves({ status: 'CREATED', data: dbId });
+
+    const req = {
+      body: newSalesMock,
+    };
+    const res = {};
+    res.status = Sinon.stub().returns(res);
+    res.json = Sinon.stub().returns(res);
+
+    await salesController.addNewSale(req, res);
+    expect(res.status.calledWith(201)).to.be.equal(true);
+    expect(res.json.calledWith(newSalesReturnMock)).to.be.equal(true);
   });
 
   afterEach(function () {
