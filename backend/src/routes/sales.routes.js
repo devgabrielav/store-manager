@@ -5,6 +5,8 @@ const salesRoutes = Router();
 
 salesRoutes.get('/', salesController.getAllSalesRoute);
 
+salesRoutes.post('/', salesController.addNewSale);
+
 salesRoutes.get('/:id', salesController.getSaleByIdRoute);
 
 module.exports = salesRoutes;
