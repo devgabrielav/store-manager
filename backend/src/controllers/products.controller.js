@@ -31,8 +31,18 @@ const addProductRoute = async (req, res) => {
   return res.status(code).json(data);
 };
 
+const updateProductRoute = async (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+  const { status, data } = await productsServices.updateProduct(id, name);
+  const code = httpMap[status];
+
+  return res.status(code).json(data);
+};
+
 module.exports = {
   getAllProductsRoute,
   getProductByIdRoute,
   addProductRoute,
+  updateProductRoute,
 };
