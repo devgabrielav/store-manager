@@ -46,7 +46,6 @@ describe('Realizando testes - SALES CONTROLLER:', function () {
     const res = {};
     res.status = Sinon.stub().returns(res);
     res.json = Sinon.stub().returns(res);
-    console.log(res.json);
 
     await salesController.getSaleByIdRoute(req, res);
     expect(res.status.calledWith(404)).to.be.equal(true);
