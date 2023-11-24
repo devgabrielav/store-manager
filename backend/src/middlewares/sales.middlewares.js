@@ -70,8 +70,38 @@ const saleExists = async (req, res, next) => {
   const { id } = req.params;
   const findSale = await salesModel.findSaleById(id);
 
-  if (!findSale) {
+  if (findSale === undefined) {
     return res.status(404).json({ message: 'Sale not found' });
+  }
+
+  next();
+};
+
+const quantityExistsAndIsValid = async (req, res, next) => {
+  const { quantity } = req.body;
+
+  if (quantity === undefined) {
+    return res.status(400).json({ message: '"quantity" is required' });
+  }
+
+  if (quantity <= 0) {
+    return res.status(422).json({ message: '"quantity" must be greater than or equal to 1' });
+  }
+
+  next();
+};
+
+const productAndSaleExists = async (req, res, next) => {
+  const { saleId, productId } = req.params;
+
+  const findSale = await salesModel.findSaleById(saleId);
+  const findProdInSale = await salesModel.findProdSale(saleId, productId);
+
+  if (findSale === undefined) {
+    return res.status(404).json({ message: 'Sale not found' });
+  }
+  if (findProdInSale === undefined) {
+    return res.status(404).json({ message: 'Product not found in sale' });
   }
 
   next();
@@ -83,4 +113,6 @@ module.exports = {
   productIdExists,
   saleExists,
   findAllProdIds,
+  quantityExistsAndIsValid,
+  productAndSaleExists,
 };

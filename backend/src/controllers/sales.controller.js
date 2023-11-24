@@ -45,9 +45,20 @@ const deleteSaleRoute = async (req, res) => {
   return res.status(code).end();
 };
 
+const updateProductQuantity = async (req, res) => {
+  const { saleId, productId } = req.params;
+  const { quantity } = req.body;
+
+  const { status, data } = await salesServices.updateQuantity(saleId, productId, quantity);
+  const code = httpMap[status];
+
+  return res.status(code).json(data);
+};
+
 module.exports = {
   getAllSalesRoute,
   getSaleByIdRoute,
   addNewSale,
   deleteSaleRoute,
+  updateProductQuantity,
 };
