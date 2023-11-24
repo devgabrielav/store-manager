@@ -52,6 +52,14 @@ describe('Realizando testes - SALES SERVICE:', function () {
     expect(data).to.deep.equal(newSalesReturnMock);
   });
 
+  it('Deleta uma venda do BD', async function () {
+    Sinon.stub(salesModel, 'deleteSaleDb').resolves(dbId);
+
+    const { status } = await salesService.deleteSale(dbId);
+
+    expect(status).to.be.equal('DELETED');
+  });
+
   afterEach(function () {
     Sinon.restore();
   });

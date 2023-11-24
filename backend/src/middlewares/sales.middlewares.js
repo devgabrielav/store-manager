@@ -1,4 +1,5 @@
-const { getById } = require('../models/products.model');
+const productsModel = require('../models/products.model');
+const salesModel = require('../models/sales.model');
 
 const keysExist = (req, res, next) => {
   const sales = req.body;
@@ -45,15 +46,32 @@ const quantityValidate = (req, res, next) => {
   next();
 };
 
-const productIdExists = async (req, res, next) => {
-  const sales = req.body;
-  const findProd = await Promise.all(sales.map((sale) => {
-    const findProdId = getById(sale.productId);
+const findAllProdIds = async (sales) => {
+  const result = await Promise.all(sales.map((sale) => {
+    const findProdId = productsModel.getById(sale.productId);
     return findProdId;
   }));
 
+  return result;
+};
+
+const productIdExists = async (req, res, next) => {
+  const sales = req.body;
+  const findProd = await findAllProdIds(sales);
+
   if (findProd.includes(undefined)) {
     return res.status(404).json({ message: 'Product not found' });
+  }
+
+  next();
+};
+
+const saleExists = async (req, res, next) => {
+  const { id } = req.params;
+  const findSale = await salesModel.findSaleById(id);
+
+  if (!findSale) {
+    return res.status(404).json({ message: 'Sale not found' });
   }
 
   next();
@@ -63,4 +81,6 @@ module.exports = {
   keysExist,
   quantityValidate,
   productIdExists,
+  saleExists,
+  findAllProdIds,
 };

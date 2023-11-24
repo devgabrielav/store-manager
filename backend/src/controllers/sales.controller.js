@@ -4,6 +4,7 @@ const httpMap = {
   SUCCESS: 200,
   CREATED: 201,
   NOT_FOUND: 404,
+  DELETED: 204,
 };
 
 const getAllSalesRoute = async (_req, res) => {
@@ -36,8 +37,17 @@ const addNewSale = async (req, res) => {
   return res.status(code).json(result);
 };
 
+const deleteSaleRoute = async (req, res) => {
+  const { id } = req.params;
+  const { status } = await salesServices.deleteSale(id);
+  const code = httpMap[status];
+
+  return res.status(code).end();
+};
+
 module.exports = {
   getAllSalesRoute,
   getSaleByIdRoute,
   addNewSale,
+  deleteSaleRoute,
 };

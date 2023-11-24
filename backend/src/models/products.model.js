@@ -44,6 +44,8 @@ const deleteProductDb = async (id) => {
     'DELETE FROM products WHERE id = ?',
     [id],
   );
+
+  return id;
 };
 
 module.exports = {

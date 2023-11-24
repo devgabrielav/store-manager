@@ -46,8 +46,28 @@ const addNewSaleBd = async (products) => {
   return id;
 };
 
+const findSaleById = async (saleId) => {
+  const [[sale]] = await connection.execute(
+    'SELECT id FROM sales WHERE id = ?',
+    [saleId],
+  );
+
+  return sale;
+};
+
+const deleteSaleDb = async (id) => {
+  await connection.execute(
+    'DELETE FROM sales WHERE id = ?',
+    [id],
+  );
+
+  return id;
+};
+
 module.exports = {
   getAll,
   getById,
   addNewSaleBd,
+  findSaleById,
+  deleteSaleDb,
 };

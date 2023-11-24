@@ -32,6 +32,24 @@ describe('Realizando testes - SALES MODEL:', function () {
     expect(newSaleId).to.deep.equal(dbId);
   });
 
+  it('Encontra uma venda por id', async function () {
+    Sinon.stub(connection, 'execute').resolves([[{ id: 4 }]]);
+
+    const foundSale = await salesModel.findSaleById(dbId);
+
+    expect(foundSale).to.be.a('object');
+    expect(foundSale).to.deep.equal({ id: 4 });
+  });
+
+  it('Deleta uma venda com sucesso', async function () {
+    Sinon.stub(connection, 'execute').resolves([[{ id: 4 }]]);
+
+    const deletedSale = await salesModel.deleteSaleDb(dbId);
+
+    expect(deletedSale).to.be.a('number');
+    expect(deletedSale).to.deep.equal(dbId);
+  });
+
   afterEach(function () {
     Sinon.restore();
   });

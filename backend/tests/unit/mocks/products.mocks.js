@@ -18,6 +18,11 @@ const productMock = {
   name: 'Veste Black Widow',
 };
 
+const modifiedProductMock = {
+  id: 4,
+  name: 'Black Widow Vest',
+};
+
 const dbId = 4;
 
 const dbInsertId = { insertId: 4 };
@@ -27,4 +32,5 @@ module.exports = {
   dbId,
   productMock,
   dbInsertId,
+  modifiedProductMock,
 };

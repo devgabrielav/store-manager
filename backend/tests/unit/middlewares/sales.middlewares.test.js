@@ -2,10 +2,16 @@ const chai = require('chai');
 const Sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const salesMiddleware = require('../../../src/middlewares/sales.middlewares');
+const productsModel = require('../../../src/models/products.model');
+const salesModel = require('../../../src/models/sales.model');
 
-chai.use(sinonChai);
 const { expect } = chai;
+chai.use(sinonChai);
 
+const newSaleMock = [{
+  productId: 1,
+  quantity: 1,
+}];
 describe('Realizando testes - SALES MIDDLEWARES:', function () {
   it('Testa o retorno sem a chave "productId"', async function () {
     const next = Sinon.stub().returns();
@@ -105,6 +111,83 @@ describe('Realizando testes - SALES MIDDLEWARES:', function () {
     res.json = Sinon.stub().returns(res);
     
     salesMiddleware.quantityValidate(req, res, next);
+
+    expect(next).to.have.been.calledWith(); 
+  });
+
+  it('Testa next productIdExists', async function () {
+    const next = Sinon.stub().returns();
+    const req = {
+      body: newSaleMock,
+    };
+    const res = {};
+    res.status = Sinon.stub().returns(res);
+    res.json = Sinon.stub().returns(res);
+
+    Sinon.stub(productsModel, 'getById').resolves({
+      id: 1,
+      name: 'Spider Web',
+    });  
+
+    await salesMiddleware.productIdExists(req, res, next);
+
+    expect(next).to.have.been.calledWith(); 
+  });
+
+  it('Testa product not found productIdExists', async function () {
+    const next = Sinon.stub().returns();
+    const req = {
+      body: 
+      [{
+        productId: 99,
+        quantity: 1,
+      }],
+    };
+    const res = {};
+    res.status = Sinon.stub().returns(res);
+    res.json = Sinon.stub().returns(res);
+
+    Sinon.stub(productsModel, 'getById').resolves(undefined);
+
+    await salesMiddleware.productIdExists(req, res, next);
+
+    expect(next).not.to.have.been.calledWith(); 
+    expect(res.status.calledWith(404)).to.be.equal(true);
+    expect(res.json.calledWith({ message: 'Product not found' })).to.be.equal(true);
+  });
+
+  it('Testa sale not found do saleExists', async function () {
+    const next = Sinon.stub().returns();
+    const req = {
+      params: 
+      { id: 99 },
+    };
+    const res = {};
+    res.status = Sinon.stub().returns(res);
+    res.json = Sinon.stub().returns(res);
+
+    Sinon.stub(salesModel, 'findSaleById').resolves(undefined);
+
+    await salesMiddleware.saleExists(req, res, next);
+
+    expect(next).not.to.have.been.calledWith(); 
+    expect(res.status.calledWith(404)).to.be.equal(true);
+    expect(res.json.calledWith({ message: 'Sale not found' })).to.be.equal(true);
+  });
+
+  it('Testa o next do saleExists', async function () {
+    const next = Sinon.stub().returns();
+    const req = {
+      params: 
+      { id: 4 },
+    };
+    const res = {};
+    res.status = Sinon.stub().returns(res);
+    res.json = Sinon.stub().returns(res);
+
+    Sinon.stub(salesModel, 'findSaleById').resolves({ id: 4 });
+
+    await salesMiddleware.saleExists(req, res, next);
 
     expect(next).to.have.been.calledWith(); 
   });

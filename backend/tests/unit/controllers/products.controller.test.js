@@ -2,7 +2,7 @@ const Sinon = require('sinon');
 const { expect } = require('chai');
 const productsService = require('../../../src/services/products.service');
 const productsController = require('../../../src/controllers/products.controller');
-const { productMock, dbProductsMock } = require('../mocks/products.mocks');
+const { productMock, dbProductsMock, modifiedProductMock } = require('../mocks/products.mocks');
 
 describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
   it('Busca todos os produtos na rota /products', async function () {
@@ -68,6 +68,45 @@ describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
 
     expect(res.status.calledWith(201)).to.be.equal(true);
     expect(res.json.calledWith(productMock)).to.be.equal(true);
+  });
+
+  it('Deleta um produto com sucesso', async function () {
+    Sinon.stub(productsService, 'deleteProduct').resolves({ status: 'DELETED' });
+
+    const req = {
+      params: {
+        id: 4,
+      },
+    };
+    const res = {};
+    res.status = Sinon.stub().returns(res);
+    res.end = Sinon.stub().returns(res);
+
+    await productsController.deleteProductRoute(req, res);
+
+    expect(res.status.calledWith(204)).to.be.equal(true);
+    expect(res.end.calledWith()).to.be.equal(true);
+  });
+
+  it('Atualiza nome do produto com sucesso', async function () {
+    Sinon.stub(productsService, 'updateProduct').resolves({ status: 'SUCCESS', data: modifiedProductMock });
+
+    const req = {
+      params: {
+        id: 4,
+      },
+      body: {
+        name: 'Black Widow Vest',
+      },
+    };
+    const res = {};
+    res.status = Sinon.stub().returns(res);
+    res.json = Sinon.stub().returns(res);
+
+    await productsController.updateProductRoute(req, res);
+
+    expect(res.status.calledWith(200)).to.be.equal(true);
+    expect(res.json.calledWith(modifiedProductMock)).to.be.equal(true);
   });
 
   afterEach(function () {

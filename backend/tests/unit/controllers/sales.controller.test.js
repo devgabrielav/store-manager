@@ -52,7 +52,7 @@ describe('Realizando testes - SALES CONTROLLER:', function () {
     expect(res.json.calledWith({ message: 'Sale not found' })).to.be.equal(true);
   });
 
-  it('Adiciona novas vendas e retorna CREATED', async function () {
+  it('Adiciona novas vendas e retorna 201', async function () {
     Sinon.stub(salesService, 'addNewSale').resolves({ status: 'CREATED', data: dbId });
 
     const req = {
@@ -65,6 +65,24 @@ describe('Realizando testes - SALES CONTROLLER:', function () {
     await salesController.addNewSale(req, res);
     expect(res.status.calledWith(201)).to.be.equal(true);
     expect(res.json.calledWith(newSalesReturnMock)).to.be.equal(true);
+  });
+
+  it('Deleta uma venda com sucesso', async function () {
+    Sinon.stub(salesService, 'deleteSale').resolves({ status: 'DELETED' });
+
+    const req = {
+      params: {
+        id: 4,
+      },
+    };
+    const res = {};
+    res.status = Sinon.stub().returns(res);
+    res.end = Sinon.stub().returns(res);
+
+    await salesController.deleteSaleRoute(req, res);
+
+    expect(res.status.calledWith(204)).to.be.equal(true);
+    expect(res.end.calledWith()).to.be.equal(true);
   });
 
   afterEach(function () {

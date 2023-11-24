@@ -2,7 +2,8 @@ const { expect } = require('chai');
 const Sinon = require('sinon');
 const connection = require('../../../src/models/connection');
 const productsModel = require('../../../src/models/products.model');
-const { productMock, dbId, dbProductsMock, dbInsertId } = require('../mocks/products.mocks');
+const { productMock, dbId, dbProductsMock, dbInsertId,
+  modifiedProductMock } = require('../mocks/products.mocks');
 
 describe('Realizando testes - PRODUCTS MODEL:', function () {
   it('Testa buscar todos os produtos', async function () {
@@ -30,6 +31,27 @@ describe('Realizando testes - PRODUCTS MODEL:', function () {
 
     expect(insertId).to.be.a('number');
     expect(insertId).to.equal(dbId);
+  });
+
+  it('Testa atualizar nome de produto', async function () {
+    Sinon.stub(connection, 'execute').resolves(modifiedProductMock);
+
+    const nameInput = 'Black Widow Vest';
+    const idInput = 4;
+
+    const product = await productsModel.updateProductDb(idInput, nameInput);
+
+    expect(product).to.be.a('object');
+    expect(product).to.deep.equal(modifiedProductMock);
+  });
+
+  it('Deleta um produto com sucesso', async function () {
+    Sinon.stub(connection, 'execute').resolves(dbId);
+
+    const deletedId = await productsModel.deleteProductDb(dbId);
+
+    expect(deletedId).to.be.a('number');
+    expect(deletedId).to.equal(dbId);
   });
 
   afterEach(function () {
