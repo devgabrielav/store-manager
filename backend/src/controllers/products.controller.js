@@ -49,10 +49,19 @@ const deleteProductRoute = async (req, res) => {
   return res.status(code).end();
 };
 
+const getProductsQuery = async (req, res) => {
+  const { q } = req.query;
+  const { status, data } = await productsServices.getProdsQuery(q);
+  const code = httpMap[status];
+
+  return res.status(code).json(data);
+};
+
 module.exports = {
   getAllProductsRoute,
   getProductByIdRoute,
   addProductRoute,
   updateProductRoute,
   deleteProductRoute,
+  getProductsQuery,
 };

@@ -3,7 +3,9 @@ const Sinon = require('sinon');
 const salesModel = require('../../../src/models/sales.model');
 const salesService = require('../../../src/services/sales.service');
 const { dbId, dbSalesMock, saleMock, newSalesMock,
-  newSalesReturnMock } = require('../mocks/sales.mocks');
+  newSalesReturnMock, updateResponseMock,
+  updateQuantityMock, saleIdMock,
+  productIdMock } = require('../mocks/sales.mocks');
 
 describe('Realizando testes - SALES SERVICE:', function () {
   it('Retorna array vazio', async function () {
@@ -58,6 +60,16 @@ describe('Realizando testes - SALES SERVICE:', function () {
     const { status } = await salesService.deleteSale(dbId);
 
     expect(status).to.be.equal('DELETED');
+  });
+
+  it('Atualiza quantidade de um produto', async function () {
+    Sinon.stub(salesModel, 'updateProductQuant').resolves(updateResponseMock);
+
+    const { status, data } = await salesService.updateQuantity(saleIdMock, productIdMock, updateQuantityMock);
+
+    expect(status).to.be.equal('SUCCESS');
+    expect(data).to.be.a('object');
+    expect(data).to.deep.equal(updateResponseMock); 
   });
 
   afterEach(function () {

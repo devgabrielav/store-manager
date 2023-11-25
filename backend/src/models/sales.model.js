@@ -52,7 +52,7 @@ const findSaleById = async (saleId) => {
     [saleId],
   );
 
-  return sale;
+  return camelize(sale);
 };
 
 const deleteSaleDb = async (id) => {
@@ -89,7 +89,7 @@ const findProdSale = async (saleId, productId) => {
     [saleId, productId],
   );
 
-  return sale;
+  return camelize(sale);
 };
 
 module.exports = {

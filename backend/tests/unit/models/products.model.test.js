@@ -3,7 +3,7 @@ const Sinon = require('sinon');
 const connection = require('../../../src/models/connection');
 const productsModel = require('../../../src/models/products.model');
 const { productMock, dbId, dbProductsMock, dbInsertId,
-  modifiedProductMock } = require('../mocks/products.mocks');
+  modifiedProductMock, responseProductQueryMock } = require('../mocks/products.mocks');
 
 describe('Realizando testes - PRODUCTS MODEL:', function () {
   it('Testa buscar todos os produtos', async function () {
@@ -52,6 +52,15 @@ describe('Realizando testes - PRODUCTS MODEL:', function () {
 
     expect(deletedId).to.be.a('number');
     expect(deletedId).to.equal(dbId);
+  });
+
+  it('Encontra produto com query', async function () {
+    Sinon.stub(connection, 'execute').resolves([responseProductQueryMock]);
+
+    const products = await productsModel.getProductsByQuery('Black');
+
+    expect(products).to.be.an('array');
+    expect(products).to.deep.equal(responseProductQueryMock);
   });
 
   afterEach(function () {

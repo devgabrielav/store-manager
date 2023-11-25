@@ -46,9 +46,39 @@ const newSalesReturnMock = {
   ],
 };
 
+const updateResponseMock = {
+  date: '2023-05-06T03:14:28.000Z',
+  productId: 2,
+  quantity: 20,
+  saleId: 1,
+};
+
+const updateQuantityMock = {
+  quantity: 20,
+};
+
+const saleIdMock = 1;
+
+const productIdMock = 2;
+
 const dbId = 4;
 
 const dateId = { insertId: 4 };
+
+const findSaleMock = {
+  saleId: 1,
+  productId: 2,
+  quantity: 10,
+};
+const saleFound = [{
+  id: 1,
+  date: '2023-05-06T03:14:28.000Z',
+}];
+
+const newSaleMock = [{
+  productId: 1,
+  quantity: 1,
+}];
 
 module.exports = {
   dbSalesMock,
@@ -57,4 +87,11 @@ module.exports = {
   newSalesMock,
   newSalesReturnMock,
   dateId,
+  updateResponseMock,
+  updateQuantityMock,
+  saleIdMock,
+  productIdMock,
+  findSaleMock,
+  newSaleMock,
+  saleFound,
 };

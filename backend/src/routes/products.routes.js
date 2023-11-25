@@ -8,6 +8,8 @@ productsRoutes.get('/', productsController.getAllProductsRoute);
 
 productsRoutes.post('/', nameValidation, productsController.addProductRoute);
 
+productsRoutes.get('/search', productsController.getProductsQuery);
+
 productsRoutes.get('/:id', productsController.getProductByIdRoute);
 
 productsRoutes.put(

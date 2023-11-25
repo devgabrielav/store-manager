@@ -95,11 +95,11 @@ const productAndSaleExists = async (req, res, next) => {
   const { saleId, productId } = req.params;
 
   const findSale = await salesModel.findSaleById(saleId);
-  const findProdInSale = await salesModel.findProdSale(saleId, productId);
-
   if (findSale === undefined) {
     return res.status(404).json({ message: 'Sale not found' });
   }
+
+  const findProdInSale = await salesModel.findProdSale(saleId, productId);
   if (findProdInSale === undefined) {
     return res.status(404).json({ message: 'Product not found in sale' });
   }

@@ -2,7 +2,8 @@ const Sinon = require('sinon');
 const { expect } = require('chai');
 const salesService = require('../../../src/services/sales.service');
 const salesController = require('../../../src/controllers/sales.controller');
-const { saleMock, dbSalesMock, newSalesMock, newSalesReturnMock, dbId } = require('../mocks/sales.mocks');
+const { saleMock, dbSalesMock, newSalesMock, newSalesReturnMock, dbId,
+  updateResponseMock } = require('../mocks/sales.mocks');
 
 describe('Realizando testes - SALES CONTROLLER:', function () {
   it('Busca todas as vendas na rota /sales', async function () {
@@ -83,6 +84,26 @@ describe('Realizando testes - SALES CONTROLLER:', function () {
 
     expect(res.status.calledWith(204)).to.be.equal(true);
     expect(res.end.calledWith()).to.be.equal(true);
+  });
+
+  it('Atualiza quantidade de um produto com sucesso', async function () {
+    Sinon.stub(salesService, 'updateQuantity').resolves({ status: 'SUCCESS', data: updateResponseMock });
+    const req = {
+      params: {
+        saleId: 1,
+        productId: 2,
+      },
+      body: {
+        quantity: 10,
+      },
+    };
+    const res = {};
+    res.status = Sinon.stub().returns(res);
+    res.json = Sinon.stub().returns(res);
+
+    await salesController.updateProductQuantity(req, res);
+    expect(res.status.calledWith(200)).to.be.equal(true);
+    expect(res.json.calledWith(updateResponseMock)).to.be.equal(true);
   });
 
   afterEach(function () {

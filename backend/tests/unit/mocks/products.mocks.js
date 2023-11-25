@@ -13,6 +13,13 @@ const dbProductsMock = [
   },
 ];
 
+const responseProductQueryMock = [
+  {
+    id: 3,
+    name: 'Joia do infinito',
+  },
+];
+
 const productMock = {
   id: 4,
   name: 'Veste Black Widow',
@@ -33,4 +40,5 @@ module.exports = {
   productMock,
   dbInsertId,
   modifiedProductMock,
+  responseProductQueryMock,
 };

@@ -41,10 +41,26 @@ const deleteProduct = async (id) => {
   return { status: 'DELETED' };
 };
 
+const getProdsQuery = async (q) => {
+  if (!q || q.length === 0) {
+    const allProducts = await productsModel.getAll();
+    return { status: 'SUCCESS', data: allProducts };
+  }
+
+  const result = await productsModel.getProductsByQuery(q);
+  
+  if (result.length === 0) {
+    return { status: 'SUCCESS', data: [] };
+  }
+
+  return { status: 'SUCCESS', data: result };
+};
+
 module.exports = {
   getAllProducts,
   getProductById,
   addProduct,
   updateProduct,
   deleteProduct,
+  getProdsQuery,
 };

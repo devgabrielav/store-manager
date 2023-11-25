@@ -2,7 +2,8 @@ const { expect } = require('chai');
 const Sinon = require('sinon');
 const productsModel = require('../../../src/models/products.model');
 const productsService = require('../../../src/services/products.service');
-const { productMock, dbId, dbProductsMock, modifiedProductMock } = require('../mocks/products.mocks');
+const { productMock, dbId, dbProductsMock,
+  modifiedProductMock, responseProductQueryMock } = require('../mocks/products.mocks');
 
 describe('Realizando testes - PRODUCTS SERVICE:', function () {
   it('Retorna array vazio', async function () {
@@ -70,6 +71,36 @@ describe('Realizando testes - PRODUCTS SERVICE:', function () {
     const { status } = await productsService.deleteProduct(dbId);
 
     expect(status).to.be.equal('DELETED');
+  });
+
+  it('Retorna SUCCESS e um array vazio', async function () {
+    Sinon.stub(productsModel, 'getProductsByQuery').resolves([]);
+
+    const { status, data } = await productsService.getProdsQuery('No products');
+
+    expect(status).to.be.equal('SUCCESS');
+    expect(data).to.be.a('array');
+    expect(data).to.deep.equal([]);
+  });
+
+  it('Retorna todos os produtos e SUCCESS', async function () {
+    Sinon.stub(productsModel, 'getAll').resolves(dbProductsMock);
+
+    const { status, data } = await productsService.getProdsQuery('');
+
+    expect(status).to.be.equal('SUCCESS');
+    expect(data).to.be.a('array');
+    expect(data).to.deep.equal(dbProductsMock);
+  });
+
+  it('Retorna os produtos com a respectiva query', async function () {
+    Sinon.stub(productsModel, 'getProductsByQuery').resolves(responseProductQueryMock);
+
+    const { status, data } = await productsService.getProdsQuery('infinito');
+
+    expect(status).to.be.equal('SUCCESS');
+    expect(data).to.be.a('array');
+    expect(data).to.deep.equal(responseProductQueryMock);
   });
 
   afterEach(function () {

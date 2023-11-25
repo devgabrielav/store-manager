@@ -109,6 +109,23 @@ describe('Realizando testes - PRODUCTS CONTROLLER:', function () {
     expect(res.json.calledWith(modifiedProductMock)).to.be.equal(true);
   });
 
+  it('Busca produtos por query com sucesso', async function () {
+    Sinon.stub(productsService, 'getProdsQuery').resolves({ status: 'SUCCESS', data: dbProductsMock });
+    const req = {
+      query: {
+        q: 'o',
+      },
+    };
+    const res = {};
+    res.status = Sinon.stub().returns(res);
+    res.json = Sinon.stub().returns(res);
+
+    await productsController.getProductsQuery(req, res);
+
+    expect(res.status.calledWith(200)).to.be.equal(true);
+    expect(res.json.calledWith(dbProductsMock)).to.be.equal(true);
+  });
+
   afterEach(function () {
     Sinon.restore();
   });
